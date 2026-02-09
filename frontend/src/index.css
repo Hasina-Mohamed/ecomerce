@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-luxe-green: #11d473;
+  --color-luxe-gold: #d4af37;
+  --color-luxe-dark: #0a110d;
+  --color-luxe-muted: #f9fafb;
+  
+  --font-sans: 'Inter', sans-serif;
+}
+
+/* Base styles to match the clean aesthetic */
+body {
+  @apply bg-white text-slate-900;
+}
