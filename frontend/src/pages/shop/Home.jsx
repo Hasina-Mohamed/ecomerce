@@ -3,7 +3,7 @@ import { ArrowRight, Heart } from 'lucide-react';
 
 const Home = () => {
   return (
-    <div className="flex flex-col font-sans">
+    <div className="flex flex-col font-sans overflow-x-hidden">
 
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center bg-[#FDFBF7]">
