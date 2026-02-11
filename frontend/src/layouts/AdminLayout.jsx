@@ -1,14 +1,23 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, Users, Settings, LogOut } from 'lucide-react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Package, ShoppingCart, Users, FileText, DollarSign, LogOut } from 'lucide-react';
 
 const AdminLayout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('luxe_user');
+    localStorage.removeItem('luxe_cart');
+    navigate('/login');
+  };
 
   const menuItems = [
-    { name: 'Dashboard', icon: <LayoutDashboard size={20}/>, path: '/admin' },
-    { name: 'Products', icon: <Package size={20}/>, path: '/admin/products' },
-    { name: 'Orders', icon: <ShoppingCart size={20}/>, path: '/admin/orders' },
-    { name: 'Customers', icon: <Users size={20}/>, path: '/admin/customers' },
+    { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/admin' },
+    { name: 'Products', icon: <Package size={20} />, path: '/admin/products' },
+    { name: 'Orders', icon: <ShoppingCart size={20} />, path: '/admin/orders' },
+    { name: 'Customers', icon: <Users size={20} />, path: '/admin/customers' },
+    { name: 'Reports', icon: <FileText size={20} />, path: '/admin/reports' },
+    { name: 'Payments', icon: <DollarSign size={20} />, path: '/admin/payments' },
   ];
 
   return (
@@ -27,11 +36,10 @@ const AdminLayout = () => {
             <Link
               key={item.name}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                location.pathname === item.path 
-                ? 'bg-luxe-green/10 text-luxe-green border-l-4 border-luxe-green' 
-                : 'text-slate-400 hover:bg-white/5 hover:text-white'
-              }`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${location.pathname === item.path
+                  ? 'bg-luxe-green/10 text-luxe-green border-l-4 border-luxe-green'
+                  : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                }`}
             >
               {item.icon}
               <span className="font-medium">{item.name}</span>
@@ -40,8 +48,11 @@ const AdminLayout = () => {
         </nav>
 
         <div className="p-4 border-t border-white/10">
-          <button className="flex items-center gap-3 w-full px-4 py-3 text-slate-400 hover:text-red-400 transition-colors">
-            <LogOut size={20}/>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 w-full px-4 py-3 text-slate-400 hover:text-red-400 transition-colors rounded-xl hover:bg-white/5"
+          >
+            <LogOut size={20} />
             <span>Logout</span>
           </button>
         </div>

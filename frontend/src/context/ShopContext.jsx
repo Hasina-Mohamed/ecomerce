@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../api/axios';
 
 export const ShopContext = createContext();
 
@@ -30,20 +31,36 @@ export const ShopContextProvider = ({ children }) => {
     }, [user]);
 
 
-    const login = (email, password) => {
-        // Simple mock login
-        if (email && password) {
-            setUser({ name: 'Guest User', email });
-            navigate('/'); // Redirect to home after login
+    const login = async (email, password) => {
+        try {
+            const { data } = await api.post('/auth/login', { email, password });
+            setUser(data);
+            // Redirect based on user role
+            if (data.isAdmin) {
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
+        } catch (error) {
+            console.error("Login failed", error);
+            alert("Invalid email or password");
         }
     };
 
     const logout = () => {
         setUser(null);
+        setCart([]); // innovative: clear cart on logout
+        localStorage.removeItem('luxe_user');
+        localStorage.removeItem('luxe_cart');
         navigate('/login');
     };
 
     const addToCart = (product, quantity = 1, size = 'M', color = 'green') => {
+        if (!user) {
+            alert("Please login to add items to cart.");
+            navigate('/login');
+            return;
+        }
         setCart(prevCart => {
             // Check if item already exists with exact same options
             const existingItemIndex = prevCart.findIndex(item =>
